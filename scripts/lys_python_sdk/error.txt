@@ -1,0 +1,25 @@
+Detected 1 AprilTags
+Traceback (most recent call last):
+  File "aruco_detect.py", line 90, in <module>
+    test()
+  File "aruco_detect.py", line 83, in test
+    viso.process_image(frame)
+  File "aruco_detect.py", line 32, in process_image
+    corners = detection.corners
+NameError: name 'detection' is not defined
+
+
+
+Detected 1 AprilTags
+Traceback (most recent call last):
+  File "aruco_detect.py", line 96, in <module>
+    test()
+  File "aruco_detect.py", line 89, in test
+    viso.process_image(frame)
+  File "aruco_detect.py", line 42, in process_image
+    cv2.line(image,tuple(corners[i]),tuple(corners[(i+1)%4]),(0,255,0),2)
+cv2.error: OpenCV(4.10.0) :-1: error: (-5:Bad argument) in function 'line'
+> Overload resolution failed:
+>  - Can't parse 'pt1'. Sequence item with index 0 has a wrong type
+>  - Can't parse 'pt1'. Sequence item with index 0 has a wrong type
+

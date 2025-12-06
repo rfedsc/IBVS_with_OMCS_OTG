@@ -1,0 +1,8 @@
+string server_ip
+int32  server_port
+int32  serial_number
+string command
+---
+string respond
+
+

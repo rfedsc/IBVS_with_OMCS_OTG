@@ -1,0 +1,12 @@
+<launch>
+    <!--启动d435_color.py节点-->
+    <node pkg="lys_visp_demo" type="d435_color.py" name="d435_color_node" output="log"/>
+    <!--启动apriltag_detect.py节点-->
+    <node pkg="lys_visp_demo" type="apriltag_detect.py" name="apriltag_detect_node" output="log"/>
+    <!--启动jr603_ibvs_ctrl节点-->
+    <node pkg="lys_visp_demo" type="jr603_ibvs_ctrl" name="jr603_ibvs_ctrl" output="log"/>
+    <!--启动velocity_camera2end 节点-->
+    <node pkg="lys_visp_demo" type="velocity_camera2end.py" name="velocity_camera2end" output="log"/>
+    <!--启动jr603_jacob_test.py节点-->
+    <!-- <node pkg="lys_visp_demo" type="jr603_velocity_test.py" name="test_velocity_node" output="screen"/> -->
+</launch>

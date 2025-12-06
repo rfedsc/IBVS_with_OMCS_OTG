@@ -4,14 +4,15 @@ A ROS (Robot Operating System) package for **Image-Based Visual Servoing (IBVS)*
 
 ## Table of Contents
 
-- [Overview](https://www.doubao.com/chat/32679514653570562#overview)
-- [Dependencies](https://www.doubao.com/chat/32679514653570562#dependencies)
-- [Package Structure](https://www.doubao.com/chat/32679514653570562#package-structure)
-- [Getting Started](https://www.doubao.com/chat/32679514653570562#getting-started)
-- [Key Features](https://www.doubao.com/chat/32679514653570562#key-features)
-- [Launch Files](https://www.doubao.com/chat/32679514653570562#launch-files)
-- [Custom Messages/Services](https://www.doubao.com/chat/32679514653570562#custom-messages-services)
-- [License](https://www.doubao.com/chat/32679514653570562#license)
+- [Overview](https://www.doubao.com/chat/32685523799798274#overview)
+- [Dependencies](https://www.doubao.com/chat/32685523799798274#dependencies)
+- [Package Structure](https://www.doubao.com/chat/32685523799798274#package-structure)
+- [Getting Started](https://www.doubao.com/chat/32685523799798274#getting-started)
+- [Key Features](https://www.doubao.com/chat/32685523799798274#key-features)
+- [Experimental Tests](https://www.doubao.com/chat/32685523799798274#experimental-tests)
+- [Launch Files](https://www.doubao.com/chat/32685523799798274#launch-files)
+- [Custom Messages/Services](https://www.doubao.com/chat/32685523799798274#custom-messages-services)
+- [License](https://www.doubao.com/chat/32685523799798274#license)
 
 ## Overview
 
@@ -32,11 +33,14 @@ This package is designed for the JR603 6-degree-of-freedom (DoF) robotic arm, fo
 ```plaintext
 IBVS_with_Ruckig_OTG/
 ├── CMakeLists.txt          # Build configuration
-├── package.xml             # ROS package metadata and dependencies
 ├── LICENSE                 # License information
+├── README.md               # Project documentation
+├── docs/                   # Documentation resources
+│   └── images/             # Experimental test images
 ├── include/lys_visp_demo/  # Header files for C++ modules
 ├── launch/                 # ROS launch files for quick execution
 ├── msg/                    # Custom ROS message definitions
+├── package.xml             # ROS package metadata and dependencies
 ├── scripts/                # Python scripts for kinematics, detection, and control
 │   └── lys_python_sdk/     # Custom Python SDK for JR603 control
 ├── src/                    # C++ source files for IBVS, OTG, and hardware interface
@@ -79,6 +83,22 @@ roslaunch IBVS_with_Ruckig_OTG jr603_ibvs_pos_with_ruckig_socket.launch
 - **AprilTag Detection**: Real-time detection of AprilTag markers for visual servoing targets.
 - **PID Control**: Configurable PID controllers for joint velocity/position regulation.
 - **Modular Design**: Separated modules for kinematics, control, and vision for easy extension.
+
+## Experimental Tests
+
+This section presents the experimental platform and test results of the IBVS visual servoing for the JR603 robotic arm, verifying the performance of Ruckig OTG trajectory optimization and IBVS closed-loop control.
+
+### 1. Experimental Platform
+
+The test platform consists of the JR603 6DoF robotic arm, an industrial camera, an AprilTag calibration board, and a host computer running ROS. The hardware connection and deployment are shown below:<img src="docs/images/test_platform.jpg" width="800" alt="JR603 Experimental Platform">
+
+### 2. Visual Servoing Trajectory
+
+The following figure shows the visual trajectory tracking effect of the robotic arm end-effector during IBVS control. The trajectory is calculated based on the feature points of the detected AprilTag markers, reflecting the real-time response of the closed-loop control system:<img src="docs/images/image_trajectory.png" width="800" alt="IBVS Visual Trajectory">
+
+### 3. Velocity and Error Curves
+
+The curves below display the camera velocity response and visual error convergence during the experiment. It can be observed that the Ruckig OTG library effectively optimizes the motion process, reducing the system's jerk and enabling the visual error to converge stably to the target range:<img src="docs/images/camera_velocity_and_error_curves.png" width="800" alt="Velocity and Error Curves">
 
 ## Launch Files
 

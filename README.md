@@ -90,15 +90,21 @@ This section presents the experimental platform and test results of the IBVS vis
 
 ### 1. Experimental Platform
 
-The test platform consists of the JR603 6DoF robotic arm, an industrial camera, an AprilTag calibration board, and a host computer running ROS. The hardware connection and deployment are shown below:<img src="docs/images/test_platform.jpg" width="800" alt="JR603 Experimental Platform">
+The test platform consists of the JR603 6DoF robotic arm, an industrial camera, an AprilTag calibration board, and a host computer running ROS. The hardware connection and deployment are shown below:
+
+<img src="docs/images/test_platform.jpg" width="400" alt="JR603 Experimental Plaform">
 
 ### 2. Visual Servoing Trajectory
 
-The following figure shows the visual trajectory tracking effect of the robotic arm end-effector during IBVS control. The trajectory is calculated based on the feature points of the detected AprilTag markers, reflecting the real-time response of the closed-loop control system:<img src="docs/images/image_trajectory.png" width="800" alt="IBVS Visual Trajectory">
+The following figure shows the visual trajectory tracking effect of the robotic arm end-effector during IBVS control. The trajectory is calculated based on the feature points of the detected AprilTag markers, reflecting the real-time response of the closed-loop control system:
+
+<img src="docs/images/image_trajectory.png" width="400" alt="IBVS Visual Trajectory">
 
 ### 3. Velocity and Error Curves
 
-The curves below display the camera velocity response and visual error convergence during the experiment. It can be observed that the Ruckig OTG library effectively optimizes the motion process, reducing the system's jerk and enabling the visual error to converge stably to the target range:<img src="docs/images/camera_velocity_and_error_curves.png" width="800" alt="Velocity and Error Curves">
+The curves below display the camera velocity response and visual error convergence during the experiment. It can be observed that the Ruckig OTG library effectively optimizes the motion process, reducing the system's jerk and enabling the visual error to converge stably to the target range:
+
+<img src="docs/images/camera_velocity_and_error_curves.png" width="400" alt="Velocity and Error Curves">
 
 ## Launch Files
 

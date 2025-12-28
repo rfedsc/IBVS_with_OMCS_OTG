@@ -1,4 +1,4 @@
-# IBVS_with_Ruckig_OTG
+# IBVS_with_OMCS_OTG
 
 A ROS (Robot Operating System) package for **Image-Based Visual Servoing (IBVS)** integrated with **Ruckig Online Trajectory Generation (OTG)** for the JR603 robotic arm. This package implements real-time control, trajectory planning, and visual servoing functionalities, with support for AprilTag detection, EtherCAT communication, and PID control.
 

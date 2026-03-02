@@ -1,0 +1,27 @@
+# 文件: config/mpc_config.yaml
+# MPC控制参数
+mpc_Np: 6                     # 预测时域
+mpc_Ts: 0.033                 # 采样时间 (30Hz)
+mpc_v_max: 0.5                # 最大线速度 (m/s)
+mpc_w_max: 0.5                # 最大角速度 (rad/s)
+mpc_interaction_type: 0       # 交互矩阵类型
+mpc_Q_scale: 1.0              # 状态误差权重
+mpc_R_scale: 0.1              # 控制输入权重
+
+# 相机参数
+image_width: 640
+image_height: 480
+camera_px: 600.75
+camera_py: 601.0
+camera_u0: 325.882
+camera_v0: 250.568
+
+# AprilTag参数
+tag_size: 0.0815
+display_tag: true
+quad_decimate: 2
+
+# 控制参数
+plot: true
+convergence_threshold: 0.001
+send_velocities: true

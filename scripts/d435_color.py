@@ -21,7 +21,7 @@ def main():
     # 配置RealSense流
     config = rs.config()
     pipeline = rs.pipeline()
-    config.enable_stream(rs.stream.color,640 ,480 , rs.format.bgr8, 30)
+    config.enable_stream(rs.stream.color,640 ,480 , rs.format.bgr8, 15)
     
     # 启动流
     pipeline.start(config)

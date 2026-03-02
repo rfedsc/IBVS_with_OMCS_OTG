@@ -1,0 +1,13 @@
+<launch>
+    <rosparam file="$(find lys_visp_demo)/launch/mpc_config.yaml" command="load"/>
+    <!--启动d435_color.py节点-->
+    <node pkg="lys_visp_demo" type="d435_color.py" name="d435_color_node" output="log"/>
+    <!--启动apriltag_detect.py节点-->
+    <node pkg="lys_visp_demo" type="apriltag_detect.py" name="apriltag_detect_node" output="log"/>
+    <!--启动jr603_ibvs_ctrl节点-->
+    <node pkg="lys_visp_demo" type="jr603_mpc_ibvs_ctrlV6" name="jr603_mpc_ibvs_ctrlV6" output="screen"/>
+    <!--启动velocity_camera2end 节点-->
+    <node pkg="lys_visp_demo" type="velocity_camera2end.py" name="velocity_camera2end" output="log"/>
+    <!--启动jr603_get_joints_velocity.py节点-->
+    <node pkg="lys_visp_demo" type="jr603_get_joints_pos.py" name="get_joints_pos_node" output="log"/>
+</launch>

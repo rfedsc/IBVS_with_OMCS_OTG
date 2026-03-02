@@ -45,29 +45,27 @@ public:
         has_new_target_ = false;
     }
 
-    void update_velocity(const std::array<double, 6>& new_velocity) {
-        has_new_target_ = true;
-        new_velocity_ = new_velocity;
-        new_acceleration_.fill(0.0);
-    }
 
-    void update_velocity_acc(const std::array<double, 6>& new_velocity,
-                             const std::array<double, 6>& new_acc) {
-        has_new_target_ = true;
-        new_velocity_ = new_velocity;
-        new_acceleration_ = new_acc;
-    }
-
-    void update_targets(const std::array<double, 6>& new_velocity,
-                        const std::array<double, 6>& new_acceleration,
+    void update_targets(const std::array<double, 6>& new_current_position,
+                        const std::array<double, 6>& new_current_velocity,
+                        const std::array<double, 6>& new_current_acceleration,
+                        
+    			 const std::array<double, 6>& new_target_velocity,
+                        const std::array<double, 6>& new_target_acceleration,
+                        
                         const std::array<double, 6>& new_max_acc,
                         const std::array<double, 6>& new_max_jerk,
                         double new_min_dur) {
 
         has_new_target_ = true;
-
-        new_velocity_ = new_velocity;
-        new_acceleration_ = new_acceleration;
+        
+        new_current_position_ = new_current_position;
+        new_current_velocity_ = new_current_velocity;
+	new_current_acceleration_ = new_current_acceleration;
+	
+        new_target_velocity_ = new_target_velocity;
+        new_target_acceleration_ = new_target_acceleration;
+        
         new_max_acc_ = new_max_acc;
         new_max_jerk_ = new_max_jerk;
         new_minimum_duration_time_ = new_min_dur;
@@ -75,16 +73,19 @@ public:
 
     void step() {
         if (has_new_target_) {
-            input_->target_velocity = new_velocity_;
-            input_->target_acceleration = new_acceleration_;
+        
+            input_->current_position = new_current_position_;
+            input_->current_velocity = new_current_velocity_;
+            input_->current_acceleration = new_current_acceleration_;
 
-            // 如果用户更新了限制，也应用
-            if (!new_max_acc_.empty()) {
-                input_->max_acceleration = new_max_acc_;
-                input_->max_jerk = new_max_jerk_;
-                input_->minimum_duration = new_minimum_duration_time_;
-            }
-
+            input_->target_velocity = new_target_velocity_;
+            input_->target_acceleration = new_target_acceleration_ ;
+            
+            input_->max_acceleration = new_max_acc_;
+            input_->max_jerk = new_max_jerk_;
+            input_->minimum_duration = new_minimum_duration_time_;
+            
+            task_finished_ = false;
             has_new_target_ = false;
         }
 
@@ -101,6 +102,7 @@ public:
                            std::array<double, 6>& vel,
                            std::array<double, 6>& acc,
                            std::array<double, 6>& jerk) {
+                           
         pos = output_->new_position;
         vel = output_->new_velocity;
         acc = output_->new_acceleration;
@@ -115,10 +117,16 @@ private:
     std::unique_ptr<InputParameter<6>> input_;
     std::unique_ptr<OutputParameter<6>> output_;
 
-    std::array<double, 6> new_velocity_{};
-    std::array<double, 6> new_acceleration_{};
+    std::array<double, 6> new_current_position_{};
+    std::array<double, 6> new_current_velocity_{};
+    std::array<double, 6> new_current_acceleration_{};
+
+    std::array<double, 6> new_target_velocity_{};
+    std::array<double, 6> new_target_acceleration_{};
+
     std::array<double, 6> new_max_acc_{};
     std::array<double, 6> new_max_jerk_{};
+    
     double new_minimum_duration_time_{0.0};
 
     bool task_finished_;

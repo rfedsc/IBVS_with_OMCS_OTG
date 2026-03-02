@@ -62,21 +62,11 @@ int main(int argc,char **argv){
     //定义期望的像素坐标
     vpImagePoint ip;
     
-    //设置相机外参
-    //vpPoseVector ePc(-0.0312543, -0.0584638, 0.0309834, -0.00506562, -0.00293325, 0.0117901);
-//  vpHomogeneousMatrix eMc({-0.9383237781,  0.3454034437, -0.0156508324, 19.6840414524/1000,
-//                           -0.3453307974, -0.9384533019, -0.0072139123, 87.1318265298/1000,
-//                           -0.0171792855, -0.001364271,   0.9998514944, 58.7619045457/1000,
-//                          0,0,0,1});
     vpHomogeneousMatrix eMc({-0.9988679632, -0.0266672272, -0.0393910032, 32.6903893873/1000,
                              0.0271749617, -0.999553647,  -0.0124108139, 67.2805551257/1000,
                              -0.0390424589, -0.0134672134,  0.9991467963, 27.4906771353/1000,
                             0,0,0,1});
 
-    //  vpHomogeneousMatrix eMc({-0.9856255285,0.0282181293,-0.1665714703,79.0329711448/1000,
-    //                         -0.0290209398,-0.9995759536,0.0023870572,94.7123551026/1000,
-    //                         -0.166433478,0.0071868052,0.9860264942,20.1472350327/1000,
-    //                        0,0,0,1});
 
 
     //设置相机内参
@@ -249,8 +239,7 @@ int main(int argc,char **argv){
                 feature_pub.publish(point_msg);
                 ROS_INFO_STREAM("cdMo:\r\n"<<cdMo);
                 //输出p_[i]的二维投影坐标
-                //ROS_INFO_STREAM("p_["<<i<<"] is:"<<p_[i]);
-                ROS_INFO_STREAM("Projected point " << i << ": x=" << p_[0] << ", y=" << p_[1]);
+                ROS_INFO_STREAM("p_["<<i<<"] is: x=" << p_[0] << ", y=" << p_[1]);
                 //输入pd[i]的坐标和深度
                 ROS_INFO_STREAM("pd["<<i<<"]:x="<<pd[i].get_x()<<",y="<<pd[i].get_y()<<",Z="<<pd[i].get_Z());
            }
@@ -273,9 +262,15 @@ int main(int argc,char **argv){
                 ROS_INFO_STREAM("p["<<i<<"]:x="<<p[i].get_x()<<",y="<<p[i].get_y()<<",Z="<<p[i].get_Z());
             }
             
+            double lambda = 1.0;
+            task.computeError();				//计算特征误差
+            vpColVector e = task.getError(); 			//获取特征误差
+            vpMatrix L = task.computeInteractionMatrix();	//计算交互矩阵
+            vpMatrix L_pinv = L.pseudoInverse();		//计算伪逆
+            v_c = -lambda*L_pinv*e;				//计算相机速度
                     
-            v_c = opt_task_sequencing?task.computeControlLaw((vpTime::measureTimeMs()-t_init_servo)/1000.0)
-                                 :task.computeControlLaw();
+            //v_c = opt_task_sequencing?task.computeControlLaw((vpTime::measureTimeMs()-t_init_servo)/1000.0)
+            //                     :task.computeControlLaw();
                 
             double error = task.getError().sumSquare();
 

@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(lys_visp_demo)
 
+## ====== ASan BEGIN ======
+set(CMAKE_BUILD_TYPE Debug)
+
+add_compile_options(
+  -fsanitize=address
+  -fno-omit-frame-pointer
+  -g
+)
+
+add_link_options(
+  -fsanitize=address
+)
+## ====== ASan END ======
+
 ## Compile as C++11, supported in ROS Kinetic and newer
 ## add_compile_options(-std=c++17)
 set(CMAKE_CXX_STANDARD 20)
@@ -9,7 +23,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -26,9 +39,19 @@ find_package(catkin REQUIRED COMPONENTS
   visp_bridge
 )
 
+# 根据您的查找结果，头文件在/usr/include/fl/
+# 库文件在/usr/lib/x86_64-linux-gnu/libfuzzylite.so
+set(fuzzylite_INCLUDE_DIRS "/usr/include")
+set(fuzzylite_LIBRARIES "/usr/lib/x86_64-linux-gnu/libfuzzylite.so")
+message(STATUS "fuzzylite include dirs: ${fuzzylite_INCLUDE_DIRS}")
+message(STATUS "fuzzylite libraries: ${fuzzylite_LIBRARIES}")
+
 find_package(VISP REQUIRED)
 find_package(realsense2_camera REQUIRED)
 find_package(ruckig REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(OsqpEigen REQUIRED)
+#find_package(OpenCV REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -140,10 +163,29 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
   ${VISP_INCLUDE_DIRS}
   ${REALSENSE2_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
+  ${OsqpEigen_INCLUDE_DIRS}
+  ${fuzzylite_INCLUDE_DIRS} 
+)
+
+add_library(mpc_ibvs_controllerV1
+  src/mpc_ibvs_controllerV1.cpp
+)
+
+add_library(mpc_ibvs_controllerV2
+  src/mpc_ibvs_controllerV2.cpp
+)
+
+add_library(mpc_ibvs_controllerV3
+  src/mpc_ibvs_controllerV3.cpp
+)
+
+add_library(mpc_ibvs_controllerV4
+  src/mpc_ibvs_controllerV3.cpp
 )
 
 add_executable(camera_sub src/camera_sub.cpp)
@@ -154,12 +196,92 @@ add_executable(jr603_ibvs_ctrl src/jr603_ibvs_ctrl.cpp)
 add_executable(jr603_velocity_with_otg src/jr603_velocity_with_otg.cpp)
 add_executable(jr603_pos_with_otg src/jr603_pos_with_otg.cpp)
 
+#add_executable(mpc_ibvs_controllerV1 src/mpc_ibvs_controllerV1.cpp)
+
+add_executable(jr603_mpc_ibvs_ctrlV0 src/jr603_mpc_ibvs_ctrlV0.cpp)
+
+add_executable(jr603_mpc_ibvs_ctrlV4 src/jr603_mpc_ibvs_ctrlV4.cpp) #不加速度和视野约束
+add_executable(jr603_mpc_ibvs_ctrlV5 src/jr603_mpc_ibvs_ctrlV5.cpp) #添加速度和视野约束，但是mpc求解的仍然是无约束优化问题
+add_executable(jr603_mpc_ibvs_ctrlV6 src/jr603_mpc_ibvs_ctrlV6.cpp) #添加了速度和视野约束，使用OSQP求解器
+
+add_executable(jr603_fd_ibvs_ctrlV1 src/jr603_fd_ibvs_ctrlV1.cpp)   #模糊方向速度控制
+
 set_target_properties(visp_ctrl PROPERTIES EXCLUDE_FROM_ALL FALSE)
 
 target_link_libraries(jr603_ibvs_ctrl
             ${catkin_LIBRARIES}
             ${VISP_LIBRARIES}
             )
+
+target_link_libraries(jr603_fd_ibvs_ctrlV1
+            ${catkin_LIBRARIES}
+            ${VISP_LIBRARIES}
+            ${fuzzylite_LIBRARIES}
+            )
+                     
+target_link_libraries(jr603_mpc_ibvs_ctrlV0
+            ${catkin_LIBRARIES}
+            ${VISP_LIBRARIES}
+            )
+            
+target_link_libraries(mpc_ibvs_controllerV1
+  			${catkin_LIBRARIES}
+  			${VISP_LIBRARIES}
+  			OsqpEigen::OsqpEigen
+  			${EIGEN3_LIBRARIES}        # 添加Eigen3
+  			#${OpenCV_LIBS}             # 添加OpenCV
+)
+
+target_link_libraries(mpc_ibvs_controllerV2
+  			${catkin_LIBRARIES}
+  			${VISP_LIBRARIES}
+  			OsqpEigen::OsqpEigen
+  			${EIGEN3_LIBRARIES}        # 添加Eigen3
+  			#${OpenCV_LIBS}             # 添加OpenCV
+)
+
+target_link_libraries(mpc_ibvs_controllerV3
+  			${catkin_LIBRARIES}
+  			${VISP_LIBRARIES}
+  			OsqpEigen::OsqpEigen
+  			${EIGEN3_LIBRARIES}        # 添加Eigen3
+  			#${OpenCV_LIBS}             # 添加OpenCV
+)
+
+target_link_libraries(mpc_ibvs_controllerV4
+  			${catkin_LIBRARIES}
+  			${VISP_LIBRARIES}
+  			OsqpEigen::OsqpEigen
+  			${EIGEN3_LIBRARIES}        # 添加Eigen3
+  			#${OpenCV_LIBS}             # 添加OpenCV
+)
+            
+target_link_libraries(jr603_mpc_ibvs_ctrlV4
+  			mpc_ibvs_controllerV2      # 链接自己的库
+  			${catkin_LIBRARIES}
+  			${VISP_LIBRARIES}
+  			OsqpEigen::OsqpEigen
+  			${EIGEN3_LIBRARIES}        # 添加Eigen3
+  			#${OpenCV_LIBS}             # 添加OpenCV
+)
+
+target_link_libraries(jr603_mpc_ibvs_ctrlV5
+  			mpc_ibvs_controllerV3      # 链接自己的库
+  			${catkin_LIBRARIES}
+  			${VISP_LIBRARIES}
+  			OsqpEigen::OsqpEigen
+  			${EIGEN3_LIBRARIES}        # 添加Eigen3
+  			#${OpenCV_LIBS}             # 添加OpenCV
+)
+
+target_link_libraries(jr603_mpc_ibvs_ctrlV6
+  			mpc_ibvs_controllerV4      # 链接自己的库
+  			${catkin_LIBRARIES}
+  			${VISP_LIBRARIES}
+  			OsqpEigen::OsqpEigen
+  			${EIGEN3_LIBRARIES}        # 添加Eigen3
+  			#${OpenCV_LIBS}             # 添加OpenCV
+)
 
 target_link_libraries(test_visp_realsence
             ${catkin_LIBRARIES}
@@ -191,6 +313,13 @@ target_link_libraries(jr603_pos_with_otg
 	    ${catkin_LIBRARIES}
 	    ruckig::ruckig
 	    )
+	    
+# 如果从源码构建fuzzylite，则添加依赖
+if(TARGET fuzzylite_built)
+  add_dependencies(jr603_fuzzy_ibvs_ctrl fuzzylite_built)
+  message(STATUS "Added fuzzylite build dependency to jr603_fuzzy_ibvs_ctrl")
+endif()
+
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}

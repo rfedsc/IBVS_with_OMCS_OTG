@@ -182,17 +182,17 @@ The test platform consists of the JR603 6DoF robotic arm, an industrial camera, 
 
 The following figure shows the visual trajectory tracking effect of the robotic arm end-effector during IBVS control. The trajectory is calculated based on the feature points of the detected AprilTag markers, reflecting the real-time response of the closed-loop control system:
 
-<img src="C:\Users\lys\AppData\Roaming\Typora\typora-user-images\image-20260302121958314.png" width="50%">
+<img src="docs\images\ibvs.png" width="50%">
 
-<img src="C:\Users\lys\AppData\Roaming\Typora\typora-user-images\image-20260302122027121.png" width="50%">
+<img src="docs\images\mpc-ibvs.png" width="50%">
 
 ### 3. Velocity and Error Curves
 
 The curves below display the camera velocity response and visual error convergence during the experiment. It can be observed that the Ruckig OTG library effectively optimizes the motion process, reducing the system's jerk and enabling the visual error to converge stably to the target range:
 
-![image-20260302120041341](C:\Users\lys\AppData\Roaming\Typora\typora-user-images\image-20260302120041341.png)
+<img src="docs\images\ibvs-camera_velocity_and_error_curves.png" width="50%">
 
-![](C:\Users\lys\AppData\Roaming\Typora\typora-user-images\image-20260302115923229.png)
+<img src="docs\images\mpc-ibvs-camera_velocity_and_error_curves.png" width="50%">
 
 ## Launch Files
 
